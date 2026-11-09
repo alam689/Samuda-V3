@@ -1,0 +1,19 @@
+# Raw source material supplied for the build — the website already contains what it needs
+/*.docx
+/*.pdf
+/*.jpg
+/*.png
+/samuda_chemical_website_ui_ux_blueprint.md
+~$*
+
+# Local tooling
+.claude/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+
+# Node / Vite
+node_modules/
+dist/
