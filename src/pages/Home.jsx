@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import Certifications from "../components/Certifications.jsx";
+import Certifications, { CERTS, CertMini } from "../components/Certifications.jsx";
 import Icon from "../components/Icon.jsx";
 import { asset } from "../lib/asset.js";
 import { usePageMeta } from "../lib/hooks.js";
@@ -55,13 +55,18 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="hero__facts">
+        <div className="hero__facts hero__certs">
           <div className="container">
-            <ul>
-              <li><Icon name="flask"/><div><strong>Chlor-Alkali Leader</strong><span>Ion-exchange membrane technology</span></div></li>
-              <li><Icon name="factory"/><div><strong>Integrated Complex</strong><span>Four plants at Gazaria, Munshiganj</span></div></li>
-              <li><Icon name="spark"/><div><strong>28.19 MW Captive Power</strong><span>Uninterrupted production</span></div></li>
-              <li><Icon name="globe"/><div><strong>Export Ready</strong><span>Serving customers at home and abroad</span></div></li>
+            <ul aria-label="Certifications">
+              {CERTS.map((c) => (
+                <li key={c.key}>
+                  <Link className="hcert" to={`#cert-${c.key}`} title={`View ${c.title} certification`}>
+                    <CertMini cert={c}/>
+                    <div><strong>{c.title}</strong><span>{c.tag}</span></div>
+                    <Icon name="arrow" className="ico hcert__go"/>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

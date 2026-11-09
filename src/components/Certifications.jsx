@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Icon from "./Icon.jsx";
 import { asset } from "../lib/asset.js";
 
 // Each certificate is shown as a "seal" card: a white medallion inside a rotating
 // ring, on a green gradient panel with a light sweep and glow on hover.
-const CERTS = [
+export const CERTS = [
   {
     key: "iso",
     tag: "Quality Management System",
@@ -40,7 +40,20 @@ const CERTS = [
   },
 ];
 
+// Small round seal (logo on a white medallion) — used in the home hero strip.
+export function CertMini({ cert }) {
+  return (
+    <i className={`hcert__seal hcert__seal--${cert.key}`} aria-hidden="true">
+      {cert.img ? <img src={asset(cert.img)} alt="" loading="lazy" /> : cert.seal}
+      <b className="hcert__tick"><Icon name="check"/></b>
+    </i>
+  );
+}
+
 export default function Certifications({ mist = false }) {
+  // A link to #cert-<key> (e.g. from the home hero) briefly spotlights that card.
+  const { hash } = useLocation();
+  const spot = hash.startsWith("#cert-") ? hash.slice(6) : null;
   return (
     <section className={`section${mist ? " section--mist" : ""}`} id="certifications" aria-labelledby="cert-title">
       <div className="container">
@@ -50,7 +63,7 @@ export default function Certifications({ mist = false }) {
         </div>
         <ul className="certs" aria-label="Certifications">
           {CERTS.map((c, i) => (
-            <li className={`cert cert--${c.key} reveal`} style={{ "--d": `${90 * i}ms` }} key={c.key}>
+            <li id={`cert-${c.key}`} className={`cert cert--${c.key} reveal${spot === c.key ? " is-spot" : ""}`} style={{ "--d": `${90 * i}ms` }} key={spot === c.key ? `${c.key}-${hash}` : c.key}>
               <span className="cert__glow" aria-hidden="true"></span>
               <span className="cert__shine" aria-hidden="true"></span>
               <div className="seal">
