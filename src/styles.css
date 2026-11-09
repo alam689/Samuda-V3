@@ -1483,3 +1483,135 @@ h1, h2, h3, h4 { letter-spacing: -.02em; }
 @media (prefers-reduced-motion: reduce) {
   .cert::after, .cert__glow, .seal__ring, .seal__ring::after, .seal__check { animation: none; }
 }
+
+
+/* ---------- category cards: premium treatment ---------- */
+@property --ccang { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+.cgrid { position: relative; }
+.cgrid::before {
+  content: ""; position: absolute; inset: -70px -40px; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(38% 50% at 18% 28%, rgba(61, 208, 138, .20), transparent 70%),
+    radial-gradient(34% 46% at 86% 74%, rgba(11, 34, 54, .10), transparent 70%);
+  filter: blur(8px);
+}
+.ccard {
+  z-index: 1; isolation: isolate; padding: 34px 30px 30px;
+  border-color: rgba(11, 34, 54, .08);
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAFCFB 100%);
+  box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgba(11, 34, 54, .04), 0 14px 34px -20px rgba(11, 34, 54, .22);
+}
+.js .ccard.reveal {
+  transition: opacity .9s var(--ease) var(--d, 0ms), transform .9s var(--ease) var(--d, 0ms),
+              translate .6s var(--ease), box-shadow .6s var(--ease), border-color .4s;
+}
+.ccard:hover {
+  translate: 0 -10px; border-color: transparent;
+  box-shadow: 0 2px 6px rgba(11, 34, 54, .05), 0 44px 70px -34px color-mix(in srgb, var(--c1) 55%, rgba(11, 34, 54, .6));
+}
+.ccard::before { height: 3px; box-shadow: 0 0 18px color-mix(in srgb, var(--c2) 70%, transparent); }
+
+/* cursor-following tinted spotlight */
+.ccard::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(460px circle at var(--mx, 85%) var(--my, 0%), color-mix(in srgb, var(--c2) 15%, transparent), transparent 62%);
+  opacity: .6; transition: opacity .5s var(--ease);
+}
+.ccard:hover::after { opacity: 1; }
+
+/* rotating gradient hairline border on hover */
+.ccard__ring {
+  position: absolute; inset: 0; z-index: 2; border-radius: inherit; padding: 1.5px; pointer-events: none;
+  background: conic-gradient(from var(--ccang), transparent 0 50%, var(--c2) 68%, var(--c1) 80%, transparent 96%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0; transition: opacity .5s var(--ease); animation: ccardSpin 5s linear infinite;
+}
+.ccard:hover .ccard__ring { opacity: 1; }
+@keyframes ccardSpin { to { --ccang: 360deg; } }
+
+/* one-pass glass shine */
+.ccard__shine { position: absolute; inset: 0; z-index: 3; border-radius: inherit; overflow: hidden; pointer-events: none; }
+.ccard__shine::before {
+  content: ""; position: absolute; top: -60%; left: -70%; width: 45%; height: 220%; opacity: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .7), transparent); transform: rotate(18deg);
+}
+.ccard:hover .ccard__shine::before { animation: ccardShine 1.2s var(--ease) forwards; }
+@keyframes ccardShine { 0% { opacity: 0; left: -70%; } 25% { opacity: 1; } 100% { opacity: 0; left: 130%; } }
+
+/* oversized watermark icon */
+.ccard__mark {
+  position: absolute; right: -44px; bottom: -44px; z-index: -1; width: 220px; height: 220px; pointer-events: none;
+  color: var(--c1); opacity: .045; stroke-width: .9; transform: rotate(-14deg);
+  transition: transform 1.1s var(--ease), opacity .6s var(--ease);
+}
+.ccard:hover .ccard__mark { opacity: .09; transform: rotate(0deg) scale(1.08); }
+
+/* number, count pill, icon */
+.ccard__num {
+  font-size: 2.7rem; background: linear-gradient(135deg, var(--c1), var(--c2)); -webkit-background-clip: text; background-clip: text;
+  color: transparent; opacity: .32; transition: opacity .5s var(--ease);
+}
+.ccard:hover .ccard__num { opacity: 1; }
+.ccard__count {
+  display: inline-flex; align-items: center; gap: 7px; color: var(--c1);
+  background: color-mix(in srgb, var(--c2) 11%, #fff); border: 1px solid color-mix(in srgb, var(--c2) 24%, transparent);
+}
+.ccard__count::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--c2);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--c2) 50%, transparent); animation: ccardPulse 2.4s ease-out infinite;
+}
+@keyframes ccardPulse { 70% { box-shadow: 0 0 0 7px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+.ccard__icon {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 12px 24px -12px var(--c1);
+  transition: transform .7s var(--ease), box-shadow .7s var(--ease);
+}
+.ccard:hover .ccard__icon {
+  transform: translateY(-3px) rotate(-8deg) scale(1.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 18px 30px -12px var(--c1), 0 0 0 7px color-mix(in srgb, var(--c2) 14%, transparent);
+}
+
+/* title underline */
+.ccard__title { position: relative; display: inline-block; align-self: flex-start; padding-bottom: 6px; }
+.ccard__title::after {
+  content: ""; position: absolute; left: 0; bottom: 0; width: 28px; height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--c1), var(--c2)); transition: width .6s var(--ease);
+}
+.ccard:hover .ccard__title::after { width: 100%; }
+
+/* product list */
+.ccard__list { position: relative; border-top: 0; }
+.ccard__list::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--c2) 55%, transparent), transparent 85%);
+}
+.ccard__list a { display: flex; align-items: center; gap: 11px; }
+.ccard__list a::before {
+  content: ""; flex: none; margin: 0; width: 6px; height: 6px; border-radius: 1.5px; transform: rotate(45deg);
+  background: #CDD5DC; transition: background .3s, transform .35s var(--ease), box-shadow .3s;
+}
+.ccard__list a:hover { color: var(--c1); padding-left: 6px; }
+.ccard__list a:hover::before { background: var(--c2); transform: rotate(45deg) scale(1.35); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c2) 20%, transparent); }
+
+/* CTA becomes a pill that fills with the card's gradient */
+.ccard > .link-arrow {
+  align-self: flex-start; gap: 12px; padding: 7px 7px 7px 18px; border: 1px solid rgba(11, 34, 54, .1); border-radius: 999px;
+  color: var(--c1); background: rgba(255, 255, 255, .8); transition: color .4s, background .4s, border-color .4s, box-shadow .4s;
+}
+.ccard > .link-arrow .ico {
+  width: 30px; height: 30px; padding: 7px; border-radius: 50%; color: var(--c1);
+  background: color-mix(in srgb, var(--c2) 14%, #fff); transition: transform .4s var(--ease), background .4s, color .4s;
+}
+.ccard:hover > .link-arrow {
+  color: #fff; border-color: transparent; background: linear-gradient(135deg, var(--c1), var(--c2));
+  box-shadow: 0 14px 26px -14px var(--c1);
+}
+.ccard:hover > .link-arrow .ico { color: #fff; background: rgba(255, 255, 255, .2); transform: translateX(3px) rotate(-45deg); }
+
+@media (hover: none) {
+  .ccard__ring, .ccard__shine { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ccard__ring, .ccard__count::before { animation: none !important; }
+  .ccard__shine { display: none; }
+}

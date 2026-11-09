@@ -77,11 +77,22 @@ export function ProductCard({ product: p, hidden = false }) {
   );
 }
 
+// Feeds the pointer position to CSS so the card's soft spotlight follows the cursor.
+function trackSpotlight(e) {
+  const el = e.currentTarget;
+  const r = el.getBoundingClientRect();
+  el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+  el.style.setProperty("--my", `${e.clientY - r.top}px`);
+}
+
 export function CategoryCards() {
   return CATEGORIES.map((c, i) => {
     const items = productsIn(c.slug);
     return (
-      <article key={c.slug} className={`ccard ccard--${c.slug} reveal`} style={{ "--d": `${i * 80}ms` }}>
+      <article key={c.slug} className={`ccard ccard--${c.slug} reveal`} style={{ "--d": `${i * 80}ms` }} onPointerMove={trackSpotlight}>
+        <span className="ccard__ring" aria-hidden="true" />
+        <span className="ccard__shine" aria-hidden="true" />
+        <Icon name={c.icon} className="ccard__mark" />
         <div className="ccard__top">
           <span className="ccard__num">0{i + 1}</span>
           <span className="ccard__count">{items.length} products</span>
