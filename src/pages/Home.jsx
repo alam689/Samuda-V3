@@ -55,37 +55,42 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="hero__facts hero__certs">
-          <div className="container">
-            <ul aria-label="Certifications">
-              {CERTS.map((c) => (
-                <li key={c.key}>
-                  <Link className="hcert" to={`#cert-${c.key}`} title={`View ${c.title} certification`}>
-                    <CertMini cert={c}/>
-                    <div><strong>{c.title}</strong><span>{c.tag}</span></div>
-                    <Icon name="arrow" className="ico hcert__go"/>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        {/* Lower hero bar: two labelled logo marquees side by side (Certified | Our concerns) */}
+        <div className="hero__strip">
+          <div className="hero__strip-inner">
+            <div className="hstrip" role="region" aria-label="Certifications">
+              <p className="hstrip__label">Certified</p>
+              <div className="hstrip__viewport">
+                <ul className="hstrip__track hstrip__track--certs">
+                  {Array.from({ length: 4 }, () => CERTS).flat().map((c, i) => {
+                    const dup = i >= CERTS.length;
+                    return (
+                      <li key={i} aria-hidden={dup ? "true" : undefined}>
+                        <Link className="hstrip__item hstrip__cert" to={`#cert-${c.key}`} title={`${c.title} — ${c.tag}`} tabIndex={dup ? -1 : undefined}>
+                          <CertMini cert={c}/>
+                          <span>{c.title}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
 
-        <div className="hero__group" role="region" aria-label="Samuda Group concerns">
-          <div className="container hero__group-inner">
-            <p className="hero__group-label"><span>Samuda Group</span>Our concerns</p>
-            <div className="hero__group-viewport">
-              <ul className="hero__group-track">
-                {[...CONCERNS, ...CONCERNS].map((c, i) => (
-                  <li key={i} className={c.current ? "is-current" : undefined} aria-hidden={i >= CONCERNS.length ? "true" : undefined}>
-                    <Icon name={c.icon}/>
-                    <div>
-                      <strong>{c.name}{c.current && <em className="hero__group-tag">You&rsquo;re here</em>}</strong>
-                      <small>{c.sector}</small>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+            <div className="hstrip hstrip--group" role="region" aria-label="Samuda Group concerns">
+              <p className="hstrip__label">Our Concerns</p>
+              <div className="hstrip__viewport">
+                <ul className="hstrip__track hstrip__track--group">
+                  {[...CONCERNS, ...CONCERNS].map((c, i) => (
+                    <li key={i} className={c.current ? "is-current" : undefined} aria-hidden={i >= CONCERNS.length ? "true" : undefined}>
+                      <span className="hstrip__item" title={c.sector}>
+                        <Icon name={c.icon}/>
+                        <span>{c.name}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
